@@ -1,0 +1,15 @@
+﻿{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "bash|command|execute|run|powershell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python scripts/session_harvester.py --mode stop"
+          }
+        ]
+      }
+    ]
+  }
+}

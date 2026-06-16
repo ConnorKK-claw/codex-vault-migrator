@@ -1,5 +1,5 @@
 ﻿{
   "slug": "codex-vault-migrator",
-  "version": "1.0.0",
-  "description": "Cross-device Codex-Brain vault migration and deployment skill"
+  "version": "2.0.0",
+  "description": "Cross-device Codex-Brain vault migration, deployment, and session knowledge harvesting. v2.0 adds auto-harvesting via hooks.json, multi-vault routing, and 7-skill pipeline."
 }

@@ -1,0 +1,124 @@
+﻿# codex-vault-migrator v2.0 — Configuration
+# ============================================
+# Copy this file to config.yaml and fill in your paths.
+# config.yaml is git-ignored and never committed.
+
+version: "2.0"
+
+# --- VAULT HIERARCHY ---
+#
+# Primary harvested knowledge storage:
+#   Codex-Brain/02-技能-vaults/{skill-name}/vault/knowledge/zk-codex-*
+#   This is the OneDrive-synced vault, accessible on all devices.
+#
+# Skill vaults are Junction-linked:
+#   ~/.codex/skills/{skill-name}/vault/  →  OneDrive/Codex-Brain/02-技能-vaults/{skill-name}/vault/
+#
+# KKNexus workspace (control plane):
+#   OneDrive/文档/New project 6/  →  scripts, config, cron, memory, logs, unified index
+
+# Primary vault: all harvested session knowledge routes here by default
+codex_brain_vault: "C:/Users/hexk/OneDrive/Codex-Brain"
+
+# KKNexus workspace path (control plane)
+vault_path: "C:/Users/hexk/OneDrive/文档/New project 6"
+
+# Codex home directory
+codex_home: "C:/Users/hexk/.codex"
+
+# Sessions directory (auto-derived from codex_home if empty)
+sessions_path: ""
+
+# Zettelkasten domain for harvested session knowledge
+zk_domain: "codex"
+
+# --- MULTI-VAULT ROUTING ---
+# Routes harvested session knowledge to the correct skill vault
+# based on the session's original working directory (cwd from session_meta).
+#
+# Knowledge is written to {vault}/knowledge/zk-codex-{catseq}-{docseq}-{slug}.md
+# and journal entries to {vault}/journal/YYYY-MM-DD.md
+#
+# To VIEW harvested knowledge:
+#   Obsidian vault: OneDrive/Codex-Brain (open in Obsidian)
+#   Skill knowledge: OneDrive/Codex-Brain/02-技能-vaults/{name}/vault/knowledge/zk-codex-*
+#   Journal:         OneDrive/Codex-Brain/02-技能-vaults/{name}/vault/journal/
+#
+# On another device: OneDrive syncs automatically; paths are identical.
+#
+# Note: %CODEX_HOME% and %USERPROFILE% env vars are expanded automatically.
+vault_routing_rules:
+  # KKNexus workspace (general session knowledge → Codex-Brain skill vault)
+  - pattern: "New project [0-9]+"
+    vault: "%CODEX_HOME%/skills/knowledge-brain/vault"
+    label: "knowledge-brain"
+  - pattern: "Codex-Brain"
+    vault: "%CODEX_HOME%/skills/knowledge-brain/vault"
+    label: "knowledge-brain"
+
+  # Skill-specific: cwd matches skill name → route to that skill's vault
+  - pattern: "equity[-_]?incentive"
+    vault: "%CODEX_HOME%/skills/equity-incentive/vault"
+    label: "equity-incentive"
+  - pattern: "tax[-_]?compliance"
+    vault: "%CODEX_HOME%/skills/tax-compliance-expert/vault"
+    label: "tax-compliance-expert"
+  - pattern: "weekly[-_]?report"
+    vault: "%CODEX_HOME%/skills/weekly-report/vault"
+    label: "weekly-report"
+  - pattern: "hk[-_]?ipo"
+    vault: "%CODEX_HOME%/skills/hk-ipo/vault"
+    label: "hk-ipo"
+  - pattern: "financial[-_]?analysis"
+    vault: "%CODEX_HOME%/skills/financial-analysis/vault"
+    label: "financial-analysis"
+  - pattern: "serenity[-_]?(a[-_]?share|investor)"
+    vault: "%CODEX_HOME%/skills/serenity-a-share-investor/vault"
+    label: "serenity-a-share-investor"
+  - pattern: "trading[-_]?analysis"
+    vault: "%CODEX_HOME%/skills/trading-analysis/vault"
+    label: "trading-analysis"
+  - pattern: "trading[-_]?agents[-_]?007"
+    vault: "%CODEX_HOME%/skills/trading-agents-007/vault"
+    label: "trading-agents-007"
+  - pattern: "quant[-_]?factor"
+    vault: "%CODEX_HOME%/skills/quant-factor-skill/vault"
+    label: "quant-factor-skill"
+  - pattern: "a[-_]?share[-_]?research"
+    vault: "%CODEX_HOME%/skills/a-share-research/vault"
+    label: "a-share-research"
+  - pattern: "engineering[-_]?practices"
+    vault: "%CODEX_HOME%/skills/engineering-practices/vault"
+    label: "engineering-practices"
+  - pattern: "ima[-_]?knowledge"
+    vault: "%CODEX_HOME%/skills/ima-knowledge/vault"
+    label: "ima-knowledge"
+  - pattern: "proactive[-_]?agent"
+    vault: "%CODEX_HOME%/skills/proactive-agent/vault"
+    label: "proactive-agent"
+
+  # Fallback: unknown cwd → write to _unrouted (data safe but not indexed)
+  - pattern: ".*"
+    vault: "_unrouted"
+    label: "UNROUTED"
+
+# --- API CONFIGURATION (for LLM deep analysis, optional) ---
+api:
+  settings_json: ""
+  key: null
+  base_url: null
+  model: null
+  temperature: 0.3
+  max_tokens: 4000
+  max_retries: 3
+  retry_backoff_sec: [2, 4, 8]
+
+# --- SCANNER SCHEDULE ---
+scan:
+  day: SUN
+  hour: 15
+  minute: 0
+
+# --- LOGGING ---
+log_level: INFO
+log_dir: ""
