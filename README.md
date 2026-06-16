@@ -2,7 +2,7 @@
 
 跨设备 Codex-Brain vault 迁移与部署 Skill。
 
-将一个已配置好的 OneDrive 同步知识库（vault）自动部署到新设备上，无需手动重建 23 个目录链接（Junction）和安装各项依赖。
+将一个已配置好的 OneDrive 同步知识库（vault）自动部署到新设备上，无需手动重建目录链接（Junction）和安装各项依赖。
 
 ## 适用场景
 
@@ -92,7 +92,7 @@ Start-Process powershell -Verb RunAs -ArgumentList "-NoProfile -ExecutionPolicy 
 | 文件访问超时 | OneDrive Files On-Demand 占位符未下载 | `attrib +U "路径" /S` 强制提前下载 |
 | 脚本无法运行 | PowerShell 执行策略 Restricted | 加 `-ExecutionPolicy Bypass` 参数 |
 | npm install 报错 | npm.ps1 被 PowerShell 执行策略拦截 | 使用 `cmd /c npm` 或 `npm.cmd` |
-| Obsidian 首次加载卡死 | 15,000+ 文件索引 + OneDrive 占位符阻塞 | 等待同步完成，关闭不必要插件，清除 workspace 缓存 |
+| Obsidian 首次加载卡死 | 海量文件索引 + OneDrive 占位符阻塞 | 等待同步完成，关闭不必要插件，清除 workspace 缓存 |
 
 ## 项目结构
 
