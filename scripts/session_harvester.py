@@ -306,13 +306,16 @@ def extract_decisions(content):
             if rec.get("type") != "response_item":
                 continue
             payload = rec.get("payload", {})
-            if payload.get("role") not in ("assistant", "system"):
+            if payload.get("role") not in ("assistant",):
                 continue
             msg_text = payload.get("content", "")
             if isinstance(msg_text, list):
                 msg_text = " ".join(str(b.get("text", "")) for b in msg_text if isinstance(b, dict))
             elif not isinstance(msg_text, str):
                 msg_text = str(msg_text)
+            
+            # Strip backtick-quoted code to eliminate format-explanation false positives
+            msg_text = re.sub(r"`[^`]*?\[(?:DECISION|ERROR|SESSION_SUMMARY)[^`]*?`", "", msg_text)
             
             # Pattern: [DECISION: <text> | context: <context>]
             for m in re.finditer(r"\[DECISION:\s*(.+?)\s*\|\s*context:\s*(.+?)\]", msg_text):
@@ -341,13 +344,16 @@ def extract_errors(content):
             if rec.get("type") != "response_item":
                 continue
             payload = rec.get("payload", {})
-            if payload.get("role") not in ("assistant", "system"):
+            if payload.get("role") not in ("assistant",):
                 continue
             msg_text = payload.get("content", "")
             if isinstance(msg_text, list):
                 msg_text = " ".join(str(b.get("text", "")) for b in msg_text if isinstance(b, dict))
             elif not isinstance(msg_text, str):
                 msg_text = str(msg_text)
+            
+            # Strip backtick-quoted code to eliminate format-explanation false positives
+            msg_text = re.sub(r"\x60[^\x60]*?\[(?:DECISION|ERROR|SESSION_SUMMARY)[^\x60]*?\x60", "", msg_text)
             
             # Pattern: [ERROR: type=<type> | resolution=<resolution>]
             for m in re.finditer(r"\[ERROR:\s*type=(.+?)\s*\|\s*resolution=(.+?)\]", msg_text):
@@ -372,7 +378,7 @@ def extract_session_summary(content):
             if rec.get("type") != "response_item":
                 continue
             payload = rec.get("payload", {})
-            if payload.get("role") not in ("assistant", "system"):
+            if payload.get("role") not in ("assistant",):
                 continue
             msg_text = payload.get("content", "")
             if isinstance(msg_text, list):

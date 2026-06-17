@@ -1,0 +1,13 @@
+﻿# codex-vault-migrator .gitignore
+
+# Configuration (user-specific paths)
+config.yaml
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# OS files
+Thumbs.db
+.DS_Store
